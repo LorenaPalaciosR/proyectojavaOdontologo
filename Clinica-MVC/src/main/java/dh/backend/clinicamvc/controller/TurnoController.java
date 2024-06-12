@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -37,4 +39,12 @@ public class TurnoController {
         return ResponseEntity.ok("Turno modificado");
     }
 
+    //formatear fechas
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    @GetMapping("/fechas")
+    public ResponseEntity<List<TurnoResponseDto>> buscarEntreFechas(@RequestParam String inicio,@RequestParam String fin){
+       LocalDate fechaInicio = LocalDate.parse(inicio);
+       LocalDate fechaFinal = LocalDate.parse(fin);
+       return ResponseEntity.ok(turnoService.buscarTurnoEntreFechas(fechaInicio,fechaFinal));
+    }
 }
