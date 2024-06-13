@@ -24,8 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class PacienteServiceTest {
     private static Logger LOGGER = LoggerFactory.getLogger(PacienteServiceTest.class);
     @Autowired
+    //Inyectar dependencias
     private PacienteService pacienteService;
-    private Paciente paciente;
+    private Paciente paciente; //generamos paciente para usarlo
 
     @BeforeEach
     void setUp(){

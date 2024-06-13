@@ -13,6 +13,8 @@ public interface IOdontologoService {
     List<Odontologo> buscarTodosOdontologos();
 
     void modificarOdontologo(Odontologo odontologo);
+
+    void modificarOdontologoId(Integer id, String nuevoNombre, String nuevoApellido, String nuevaMatricula);
     void eliminarOdontologo(Integer id);
 
     //Métodos con HQL

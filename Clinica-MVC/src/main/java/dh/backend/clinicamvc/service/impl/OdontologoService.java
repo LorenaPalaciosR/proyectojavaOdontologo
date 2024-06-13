@@ -34,6 +34,25 @@ public class OdontologoService implements IOdontologoService {
     }
 
     @Override
+    public void modificarOdontologoId(Integer id, String nuevoNombre, String nuevoApellido, String nuevaMatricula) {
+        Optional<Odontologo> odontologoOpt = odontologoRepository.findById(id);
+
+        if (odontologoOpt.isPresent()) {
+            Odontologo odontologo = odontologoOpt.get();
+
+            // Modificar los atributos según los parámetros recibidos
+            odontologo.setNombre(nuevoNombre);
+            odontologo.setApellido(nuevoApellido);
+            odontologo.setNroMatricula(nuevaMatricula);
+
+            // Guardar los cambios en la base de datos
+            odontologoRepository.save(odontologo);
+        } else {
+            throw new RuntimeException("Odontólogo no encontrado con ID: " + id);
+        }
+    }
+
+   @Override
     public void eliminarOdontologo(Integer id) {
         odontologoRepository.deleteById(id);
     }

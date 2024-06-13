@@ -1,5 +1,6 @@
 package dh.backend.clinicamvc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "odontologos")
+@Table(name ="odontologos")
 public class Odontologo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,9 @@ public class Odontologo {
     private String nroMatricula;
     private String nombre;
     private String apellido;
-    @OneToMany(mappedBy = "odontologo")
+
+    @OneToMany(mappedBy = "odontologo", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Turno> turnoset = new HashSet<>();
 
     }

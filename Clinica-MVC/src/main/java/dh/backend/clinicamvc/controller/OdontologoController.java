@@ -44,6 +44,17 @@ public class OdontologoController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> modificarOdontologoPorId(@PathVariable Integer id, @RequestBody Odontologo odontologoDto) {
+        try {
+            odontologoService.modificarOdontologoId(id, odontologoDto.getNombre(), odontologoDto.getApellido(), odontologoDto.getNroMatricula());
+            return ResponseEntity.ok("Odontólogo actualizado con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al actualizar el odontólogo: " + e.getMessage());
+        }
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarOdontologo(@PathVariable Integer id){
         Optional<Odontologo> odontologoABuscar = odontologoService.buscarUnOdontologo(id);
