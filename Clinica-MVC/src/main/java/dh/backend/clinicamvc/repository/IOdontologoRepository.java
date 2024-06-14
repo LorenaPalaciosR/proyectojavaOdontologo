@@ -16,4 +16,5 @@ public interface IOdontologoRepository extends JpaRepository<Odontologo, Integer
     @Query("Select o from Odontologo o where LOWER(o.nombre) LIKE LOWER(CONCAT('%',:nombre, '%'))") //HQL
     List<Odontologo> findByNombreLike(@Param("nombre") String nombre);
 
+
 }

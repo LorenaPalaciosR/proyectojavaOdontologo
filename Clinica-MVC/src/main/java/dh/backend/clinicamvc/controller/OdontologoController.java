@@ -49,7 +49,7 @@ public class OdontologoController {
     public ResponseEntity<?> modificarOdontologoPorId(@PathVariable Integer id, @RequestBody Odontologo odontologoDto) {
         try {
             odontologoService.modificarOdontologoId(id, odontologoDto.getNombre(), odontologoDto.getApellido(), odontologoDto.getNroMatricula());
-            return ResponseEntity.ok("Odontólogo actualizado con éxito");
+            return ResponseEntity.ok("{\"message\": \"odontologo actulizado con exito\"}");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al actualizar el odontólogo: " + e.getMessage());
         }

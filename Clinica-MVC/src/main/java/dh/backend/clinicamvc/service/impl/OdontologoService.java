@@ -1,5 +1,4 @@
 package dh.backend.clinicamvc.service.impl;
-
 import dh.backend.clinicamvc.entity.Odontologo;
 import dh.backend.clinicamvc.exception.ResourceNotFoundException;
 import dh.backend.clinicamvc.repository.IOdontologoRepository;
@@ -8,10 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 @Service
 public class OdontologoService implements IOdontologoService {
 
+    private static Logger LOGGER = Logger.getLogger(String.valueOf(OdontologoService.class));
     private IOdontologoRepository odontologoRepository;
 
     public OdontologoService(IOdontologoRepository odontologoRepository) {
@@ -19,10 +21,13 @@ public class OdontologoService implements IOdontologoService {
     }
 
     public Odontologo agregarOdontologo(Odontologo odontologo){
+        LOGGER.info("Odontologo Creado: " + odontologo.getNombre() + " " + odontologo.getApellido());
         return odontologoRepository.save(odontologo);
+
     }
 
     public Optional<Odontologo> buscarUnOdontologo(Integer id){
+        LOGGER.info("¡El odontologo fue encontrado! ");
         return odontologoRepository.findById(id);
     }
     public List<Odontologo> buscarTodosOdontologos(){
@@ -31,6 +36,7 @@ public class OdontologoService implements IOdontologoService {
 
     @Override
     public void modificarOdontologo(Odontologo odontologo) {
+        LOGGER.info("Odontologo Actualizado: " + odontologo.getNombre() + " " + odontologo.getApellido() + " con matrícula:  " + odontologo.getNroMatricula());
         odontologoRepository.save(odontologo);
     }
 
@@ -47,6 +53,7 @@ public class OdontologoService implements IOdontologoService {
             odontologo.setNroMatricula(nuevaMatricula);
 
             // Guardar los cambios en la base de datos
+            LOGGER.info("Odontologo Actualizado: " + odontologo.getNombre() + " " + odontologo.getApellido() + " con matrícula:  " + odontologo.getNroMatricula());
             odontologoRepository.save(odontologo);
         } else {
             throw new RuntimeException("Odontólogo no encontrado con ID: " + id);
@@ -56,9 +63,11 @@ public class OdontologoService implements IOdontologoService {
    @Override
     public void eliminarOdontologo(Integer id) throws ResourceNotFoundException {
         Optional<Odontologo> odontologoOptional = buscarUnOdontologo(id);
-        if(odontologoOptional.isPresent())
+        if(odontologoOptional.isPresent()) {
+            LOGGER.info("Odontologo Eliminado");
             odontologoRepository.deleteById(id);
-        else throw new ResourceNotFoundException("{\"mensaje\":\"odontologo no encontrado\"}");
+        }else
+            throw new ResourceNotFoundException("{\"mensaje\":\"odontologo no encontrado\"}");
     }
 
     @Override

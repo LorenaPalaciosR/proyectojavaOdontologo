@@ -20,10 +20,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 
 @Service
 public class TurnoService implements ITurnoService {
+
+    private static Logger LOGGER = Logger.getLogger(String.valueOf(TurnoService.class));
+
     private IOdontologoRepository odontologoRepository;
     private IPacienteRepository pacienteRepository;
     private ITurnoRepository turnoRepository;
@@ -51,6 +55,7 @@ public class TurnoService implements ITurnoService {
             turnoARegistrar.setFecha(LocalDate.parse(turnoRequestDto.getFecha()));
             turnoGuardado = turnoRepository.save(turnoARegistrar);
             turnoADevolver = mapToResponseDto(turnoGuardado);
+            LOGGER.info("Turno asignado :" + turnoADevolver);
             return turnoADevolver;
         }
 
@@ -62,6 +67,7 @@ public class TurnoService implements ITurnoService {
         if(turnoOptional.isPresent()){
             Turno turnoEncontrado = turnoOptional.get();
             TurnoResponseDto turnoADevolver = mapToResponseDto(turnoEncontrado);
+            LOGGER.info("Turno encontrado");
             return turnoADevolver;
         }
         return null;
@@ -90,6 +96,7 @@ public class TurnoService implements ITurnoService {
             turnoAModificar.setOdontologo(odontologo.get());
             turnoAModificar.setPaciente(paciente.get());
             turnoAModificar.setFecha(LocalDate.parse(turnoRequestDto.getFecha()));
+            LOGGER.info("Turno asignado :" + turnoAModificar);
             turnoRepository.save(turnoAModificar);
         }
     }
@@ -97,8 +104,10 @@ public class TurnoService implements ITurnoService {
     @Override
     public void eliminarTurno(Integer id) throws ResourceNotFoundException {
         TurnoResponseDto turnoResponseDto = buscarPorId(id);
-        if(turnoResponseDto!= null)
+        if(turnoResponseDto!= null){
+            LOGGER.info("Turno eliminado");
             turnoRepository.deleteById(id);
+        }
         else throw new ResourceNotFoundException("\"{\"mensaje\":\"turno no encontrado\"}\"");
     }
 

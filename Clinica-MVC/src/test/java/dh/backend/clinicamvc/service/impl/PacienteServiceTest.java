@@ -1,9 +1,8 @@
-package dh.backend.clinicamvc.service;
+package dh.backend.clinicamvc.service.impl;
 
 
 import dh.backend.clinicamvc.entity.Domicilio;
 import dh.backend.clinicamvc.entity.Paciente;
-import dh.backend.clinicamvc.service.impl.PacienteService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
