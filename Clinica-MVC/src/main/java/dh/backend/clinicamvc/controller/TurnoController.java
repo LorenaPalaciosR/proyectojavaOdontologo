@@ -2,6 +2,8 @@ package dh.backend.clinicamvc.controller;
 
 import dh.backend.clinicamvc.Dto.request.TurnoRequestDto;
 import dh.backend.clinicamvc.Dto.response.TurnoResponseDto;
+import dh.backend.clinicamvc.exception.BadRequestException;
+import dh.backend.clinicamvc.exception.ResourceNotFoundException;
 import dh.backend.clinicamvc.service.ITurnoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +23,9 @@ public class TurnoController {
     }
 
     @PostMapping
-    public ResponseEntity<TurnoResponseDto> agregarTurno(@RequestBody TurnoRequestDto turno){
+    public ResponseEntity<TurnoResponseDto> agregarTurno(@RequestBody TurnoRequestDto turno) throws BadRequestException {
         TurnoResponseDto turnoADevolver = turnoService.registrar(turno);
-        if(turnoADevolver==null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(turnoADevolver);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(turnoADevolver);
     }
     @GetMapping
     public ResponseEntity<List<TurnoResponseDto>> buscarTodosTurnos(){
@@ -46,5 +44,11 @@ public class TurnoController {
        LocalDate fechaInicio = LocalDate.parse(inicio);
        LocalDate fechaFinal = LocalDate.parse(fin);
        return ResponseEntity.ok(turnoService.buscarTurnoEntreFechas(fechaInicio,fechaFinal));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarTurno(@PathVariable Integer id) throws ResourceNotFoundException {
+        turnoService.eliminarTurno(id);
+        return ResponseEntity.ok("\"{\"mensaje\":\"turno eliminado\"}\"");
     }
 }

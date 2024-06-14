@@ -2,6 +2,7 @@ package dh.backend.clinicamvc.service;
 
 
 import dh.backend.clinicamvc.entity.Odontologo;
+import dh.backend.clinicamvc.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public interface IOdontologoService {
     void modificarOdontologo(Odontologo odontologo);
 
     void modificarOdontologoId(Integer id, String nuevoNombre, String nuevoApellido, String nuevaMatricula);
-    void eliminarOdontologo(Integer id);
+    void eliminarOdontologo(Integer id) throws ResourceNotFoundException;
 
     //Métodos con HQL
 
