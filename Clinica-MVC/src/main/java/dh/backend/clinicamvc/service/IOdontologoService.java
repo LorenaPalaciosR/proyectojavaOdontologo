@@ -16,7 +16,7 @@ public interface IOdontologoService {
     void modificarOdontologo(Odontologo odontologo);
 
     void modificarOdontologoId(Integer id, String nuevoNombre, String nuevoApellido, String nuevaMatricula);
-    void eliminarOdontologo(Integer id) throws ResourceNotFoundException;
+    Optional<Odontologo> eliminarOdontologo(Integer id) throws ResourceNotFoundException;
 
     //Métodos con HQL
 

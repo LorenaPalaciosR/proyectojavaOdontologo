@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,19 +63,20 @@ public class TurnoService implements ITurnoService {
     }
 
     @Override
-    public TurnoResponseDto buscarPorId(Integer id) {
+    public TurnoResponseDto buscarPorId(Integer id) throws BadRequestException {
         Optional<Turno> turnoOptional = turnoRepository.findById(id);
-        if(turnoOptional.isPresent()){
+        if(turnoOptional.isEmpty()){
+            throw new BadRequestException("{\"mensaje\":\"turno no concuerda con Id\"}");
+        } else{
             Turno turnoEncontrado = turnoOptional.get();
             TurnoResponseDto turnoADevolver = mapToResponseDto(turnoEncontrado);
             LOGGER.info("Turno encontrado");
             return turnoADevolver;
         }
-        return null;
     }
 
     @Override
-    public List<TurnoResponseDto> buscarTodos() {
+    public List<TurnoResponseDto> buscarTodos() throws BadRequestException {
         List<Turno> turnos = turnoRepository.findAll();
         List<TurnoResponseDto> turnosADevolver = new ArrayList<>();
         TurnoResponseDto turnoAuxiliar = null;
@@ -82,37 +84,49 @@ public class TurnoService implements ITurnoService {
             turnoAuxiliar = mapToResponseDto(turno);
             turnosADevolver.add(turnoAuxiliar);
         }
-        return turnosADevolver;
+        if(turnosADevolver.isEmpty()){
+            throw new BadRequestException("{\"mensaje\":\"No hay lista de turnos\"}");
+
+        } else{
+            return turnosADevolver;
+        }
     }
 
     @Override
-    public void actualizarTurno(Integer id, TurnoRequestDto turnoRequestDto) {
+    public Turno actualizarTurno(Integer id, TurnoRequestDto turnoRequestDto) throws BadRequestException {
         Optional<Paciente> paciente = pacienteRepository.findById(turnoRequestDto.getPaciente_id());
         Optional<Odontologo> odontologo = odontologoRepository.findById(turnoRequestDto.getOdontologo_id());
         Optional<Turno> turno = turnoRepository.findById(id);
         Turno turnoAModificar = new Turno();
-        if(paciente.isPresent() && odontologo.isPresent() && turno.isPresent()){
+
+        if(paciente.isEmpty() && odontologo.isEmpty() && turno.isEmpty()){
+            throw new BadRequestException("{\"mensaje\":\"No se pudo actualizar el turno\"}");
+        } else{
             turnoAModificar.setId(id);
             turnoAModificar.setOdontologo(odontologo.get());
             turnoAModificar.setPaciente(paciente.get());
             turnoAModificar.setFecha(LocalDate.parse(turnoRequestDto.getFecha()));
-            LOGGER.info("Turno asignado :" + turnoAModificar);
+            turnoAModificar.setHora(LocalTime.parse(turnoRequestDto.getHora()));
+            LOGGER.info("Turno modificado :" + turnoAModificar);
             turnoRepository.save(turnoAModificar);
+            return turnoAModificar;
         }
     }
 
     @Override
-    public void eliminarTurno(Integer id) throws ResourceNotFoundException {
+    public TurnoResponseDto eliminarTurno(Integer id) throws ResourceNotFoundException, BadRequestException {
         TurnoResponseDto turnoResponseDto = buscarPorId(id);
         if(turnoResponseDto!= null){
             LOGGER.info("Turno eliminado");
             turnoRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("\"{\"mensaje\":\"turno no encontrado\"}\"");
         }
-        else throw new ResourceNotFoundException("\"{\"mensaje\":\"turno no encontrado\"}\"");
+        return turnoResponseDto;
     }
 
     @Override
-    public List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate, LocalDate endDate) {
+    public List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate, LocalDate endDate) throws BadRequestException {
         List<Turno> listadoTurnos= turnoRepository.buscarTurnoEntreFechas(starDate,endDate);
         List<TurnoResponseDto> ListadoARetornar = new ArrayList<>();
         TurnoResponseDto turnoAuxiliar = null;
@@ -120,8 +134,11 @@ public class TurnoService implements ITurnoService {
             turnoAuxiliar = mapToResponseDto(turno);
             ListadoARetornar.add(turnoAuxiliar);
         }
-
-        return ListadoARetornar;
+        if(ListadoARetornar.isEmpty()){
+            throw new BadRequestException("{\"mensaje\":\"No pudo buscar por fechas\"}");
+        } else {
+            return ListadoARetornar;
+        }
     }
 
 

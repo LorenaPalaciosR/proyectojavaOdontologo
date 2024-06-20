@@ -5,7 +5,6 @@ import dh.backend.clinicamvc.Dto.response.TurnoResponseDto;
 import dh.backend.clinicamvc.entity.Turno;
 import dh.backend.clinicamvc.exception.BadRequestException;
 import dh.backend.clinicamvc.exception.ResourceNotFoundException;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,13 +13,13 @@ import java.util.List;
 public interface ITurnoService {
     TurnoResponseDto registrar(TurnoRequestDto turnoRequestDto) throws BadRequestException;
 
-    TurnoResponseDto buscarPorId(Integer id);
+    TurnoResponseDto buscarPorId(Integer id) throws BadRequestException;
 
-    List<TurnoResponseDto> buscarTodos();
-    void actualizarTurno(Integer id, TurnoRequestDto turnoRequestDto);
-    void eliminarTurno(Integer id) throws ResourceNotFoundException;
+    List<TurnoResponseDto> buscarTodos() throws BadRequestException;
+    Turno actualizarTurno(Integer id, TurnoRequestDto turnoRequestDto)throws BadRequestException;
+    TurnoResponseDto eliminarTurno(Integer id) throws ResourceNotFoundException, BadRequestException;
 
     //HQL
-    List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate,LocalDate endDate);
+    List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate,LocalDate endDate) throws BadRequestException;
 
 }

@@ -1,6 +1,7 @@
 package dh.backend.clinicamvc.service.impl;
 
 import dh.backend.clinicamvc.entity.Paciente;
+import dh.backend.clinicamvc.exception.BadRequestException;
 import dh.backend.clinicamvc.exception.ResourceNotFoundException;
 import dh.backend.clinicamvc.repository.IPacienteRepository;
 import dh.backend.clinicamvc.service.IPacienteService;
@@ -21,33 +22,41 @@ public class PacienteService implements IPacienteService {
         this.pacienteRepository = pacienteRepository;
     }
 
-    public Paciente registrarPaciente(Paciente paciente){
+    public Paciente registrarPaciente(Paciente paciente) throws BadRequestException {
         LOGGER.info("Paciente Creado: " + paciente.getNombre() + " " + paciente.getApellido());
         return pacienteRepository.save(paciente);
     }
 
-    public Optional<Paciente> buscarPorId(Integer id){
-        LOGGER.info("Paciente Encontrado");
-        return pacienteRepository.findById(id);
+    public Optional<Paciente> buscarPorId(Integer id) throws BadRequestException {
+        Optional<Paciente> devolverPacente = pacienteRepository.findById(id);
+        if(devolverPacente.isEmpty()){
+            throw new BadRequestException("{\"mensaje\":\"paciente no encontrado\"}");
+        } else {
+            LOGGER.info("Paciente Encontrado");
+            return devolverPacente;
+        }
     }
 
     public List<Paciente> buscarTodos(){
+        LOGGER.info("Lista de todos los pacientes");
         return pacienteRepository.findAll();
     }
 
     @Override
-    public void actualizarPaciente(Paciente paciente) {
+    public void actualizarPaciente(Paciente paciente) throws BadRequestException {
         LOGGER.info("Paciente Actualizado: " + paciente.getNombre() + " " + paciente.getApellido());
         pacienteRepository.save(paciente);
     }
 
     @Override
-    public void eliminarPaciente(Integer id) throws ResourceNotFoundException {
-        Optional<Paciente> pacienteOptional = buscarPorId(id);
+    public Optional<Paciente> eliminarPaciente(Integer id) throws ResourceNotFoundException {
+        Optional<Paciente> pacienteOptional = pacienteRepository.findById(id);
         if(pacienteOptional.isPresent()) {
-            LOGGER.info("Paciente Actualizado");
+            LOGGER.info("Paciente Eliminado");
             pacienteRepository.deleteById(id);
+            return pacienteOptional;
         }else
             throw new ResourceNotFoundException("{\"mensaje\":\"paciente no encontrado\"}");
+
     }
 }
