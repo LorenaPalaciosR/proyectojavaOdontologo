@@ -3,6 +3,7 @@ package dh.backend.clinicamvc.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 import dh.backend.clinicamvc.entity.Odontologo;
 import dh.backend.clinicamvc.entity.Paciente;
+import dh.backend.clinicamvc.exception.BadRequestException;
 import dh.backend.clinicamvc.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,7 +37,7 @@ class OdontologoServiceTest {
 
     @Test
     @DisplayName("Testear que un odontologo fue creado")
-    void testOdontologoGuardado(){
+    void testOdontologoGuardado() throws BadRequestException {
         Odontologo odontologoDesdeLaBD = odontologoService.agregarOdontologo(odontologo);
 
         assertNotNull(odontologoDesdeLaBD);
@@ -45,7 +46,7 @@ class OdontologoServiceTest {
 
     @Test
     @DisplayName("Testear busqueda odontologo por id")
-    void testOdontologoPorId(){
+    void testOdontologoPorId() throws BadRequestException {
         // Primero guarda el odontólogo
         Odontologo odontologoGuardado = odontologoService.agregarOdontologo(odontologo);
         Integer id = odontologoGuardado.getId();
@@ -70,7 +71,7 @@ class OdontologoServiceTest {
 
     @Test
     @DisplayName("Testear eliminar odontólogo por id")
-    void testEliminarOdontologoPorId() throws ResourceNotFoundException {
+    void testEliminarOdontologoPorId() throws ResourceNotFoundException, BadRequestException {
 
         // Primero guarda el odontólogo
         Odontologo odontologoGuardado = odontologoService.agregarOdontologo(odontologo);

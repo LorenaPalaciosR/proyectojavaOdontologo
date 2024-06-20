@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface IPacienteService {
 
-    Paciente registrarPaciente(Paciente paciente)throws BadRequestException;
+    Paciente registrarPaciente(Paciente paciente) throws BadRequestException;
 
-    Optional<Paciente> buscarPorId(Integer id)throws BadRequestException;
+    Optional<Paciente> buscarPorId(Integer id);
 
     List<Paciente> buscarTodos();
-    void actualizarPaciente(Paciente paciente)throws BadRequestException;
+    void actualizarPaciente(Paciente paciente);
     Optional<Paciente> eliminarPaciente(Integer id) throws ResourceNotFoundException;
 }

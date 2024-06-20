@@ -28,7 +28,7 @@ public class TurnoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(turnoADevolver);
     }
     @GetMapping
-    public ResponseEntity<List<TurnoResponseDto>> buscarTodosTurnos() throws BadRequestException {
+    public ResponseEntity<List<TurnoResponseDto>> buscarTodosTurnos(){
         return ResponseEntity.ok(turnoService.buscarTodos());
     }
     @PutMapping("/{id}")
@@ -40,7 +40,7 @@ public class TurnoController {
     //formatear fechas
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @GetMapping("/fechas")
-    public ResponseEntity<List<TurnoResponseDto>> buscarEntreFechas(@RequestParam String inicio,@RequestParam String fin) throws BadRequestException {
+    public ResponseEntity<List<TurnoResponseDto>> buscarEntreFechas(@RequestParam String inicio,@RequestParam String fin){
        LocalDate fechaInicio = LocalDate.parse(inicio);
        LocalDate fechaFinal = LocalDate.parse(fin);
        return ResponseEntity.ok(turnoService.buscarTurnoEntreFechas(fechaInicio,fechaFinal));

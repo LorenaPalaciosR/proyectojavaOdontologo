@@ -13,13 +13,13 @@ import java.util.List;
 public interface ITurnoService {
     TurnoResponseDto registrar(TurnoRequestDto turnoRequestDto) throws BadRequestException;
 
-    TurnoResponseDto buscarPorId(Integer id) throws BadRequestException;
+    TurnoResponseDto buscarPorId(Integer id);
 
-    List<TurnoResponseDto> buscarTodos() throws BadRequestException;
+    List<TurnoResponseDto> buscarTodos();
     Turno actualizarTurno(Integer id, TurnoRequestDto turnoRequestDto)throws BadRequestException;
     TurnoResponseDto eliminarTurno(Integer id) throws ResourceNotFoundException, BadRequestException;
 
     //HQL
-    List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate,LocalDate endDate) throws BadRequestException;
+    List<TurnoResponseDto> buscarTurnoEntreFechas(LocalDate starDate,LocalDate endDate);
 
 }

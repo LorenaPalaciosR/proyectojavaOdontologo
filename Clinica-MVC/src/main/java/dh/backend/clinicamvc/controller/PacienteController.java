@@ -23,11 +23,8 @@ public class PacienteController {
     @PostMapping
     public ResponseEntity<Paciente>  registrarPaciente(@RequestBody Paciente paciente) throws BadRequestException {
         Paciente pacienteARetornar = pacienteService.registrarPaciente(paciente);
-        if(pacienteARetornar==null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(pacienteARetornar);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteARetornar);
+
     }
 
     @GetMapping
@@ -36,14 +33,14 @@ public class PacienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Paciente> buscarPacientePorId(@PathVariable Integer id) throws BadRequestException {
+    public ResponseEntity<Paciente> buscarPacientePorId(@PathVariable Integer id) {
         Optional<Paciente> paciente = pacienteService.buscarPorId(id);
         return ResponseEntity.ok(paciente.get());
     }
 
 
     @PutMapping
-    public ResponseEntity<String>  actualizarPaciente(@RequestBody Paciente paciente) throws BadRequestException {
+    public ResponseEntity<String>  actualizarPaciente(@RequestBody Paciente paciente) {
         pacienteService.actualizarPaciente(paciente);
         return  ResponseEntity.ok("{\"mensaje\":\"paciente actualizado\"}");
     }
