@@ -68,7 +68,7 @@ public class OdontologoService implements IOdontologoService {
 
    @Override
     public Optional<Odontologo> eliminarOdontologo(Integer id) throws ResourceNotFoundException {
-        Optional<Odontologo> odontologoOptional = buscarUnOdontologo(id);
+        Optional<Odontologo> odontologoOptional = odontologoRepository.findById(id);
         if(odontologoOptional.isPresent()) {
             LOGGER.info("Odontologo Eliminado");
             odontologoRepository.deleteById(id);
